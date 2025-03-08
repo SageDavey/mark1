@@ -15,8 +15,8 @@ This project aims to modify an Alexa device and integrate it with a **Nextion TF
 ## 🔌 Wiring Setup
 | **Nextion Pin** | **Arduino Mega Pin** |
 |---------------|----------------|
-| TX (Nextion) | RX2 (Pin 17) |
-| RX (Nextion) | TX2 (Pin 16) |
+| TX (Nextion) | RX1 (Pin 19) |
+| RX (Nextion) | TX1 (Pin 18) |
 | GND | GND |
 | VCC | 5V |
 
