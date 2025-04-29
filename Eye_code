@@ -1,0 +1,92 @@
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
+
+#define SERVOMIN   140   // Minimum pulse length
+#define SERVOMAX   520   // Maximum pulse length
+
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+
+// Servo channels
+#define EYE_SERVO        0  // Eye movement (both eyes)
+#define TILT_SERVO       1  // Head tilt
+#define RIGHT_TOP_LID    2  // Right top eyelid
+#define RIGHT_BOTTOM_LID 3  // Right bottom eyelid
+#define LEFT_TOP_LID     4  // Left top eyelid
+#define LEFT_BOTTOM_LID  5  // Left bottom eyelid
+
+// Predefined positions
+#define CENTER_POS      ((SERVOMIN + SERVOMAX) / 2)
+#define TILT_UP         (CENTER_POS - 10)
+#define TILT_DOWN       (CENTER_POS + 10)
+
+// Eye positions
+#define EYE_CENTER      (CENTER_POS - 30)   // Slight left adjustment to fix drift
+#define EYE_LEFT        (SERVOMIN + 40)
+#define EYE_RIGHT       (SERVOMAX - 40)
+
+// Eyelid positions (separate for right and left)
+#define LID_OPEN_LEFT      (SERVOMIN + 70)      
+#define LID_CLOSED_LEFT    (CENTER_POS + 40)
+
+#define LID_OPEN_RIGHT     (SERVOMIN + 70)      
+#define LID_CLOSED_RIGHT   (CENTER_POS + 40)
+
+void setup() {
+  pwm.begin();
+  pwm.setPWMFreq(50); // Analog servos run at ~50 Hz
+}
+
+void loop() {
+  // Step 0: Center all servos
+  centerAll();
+  delay(1000);
+
+  // Step 1: Tilt head up and back to center (eyes stay centered)
+  pwm.setPWM(TILT_SERVO, 0, TILT_UP);
+  delay(600);
+  pwm.setPWM(TILT_SERVO, 0, CENTER_POS);
+  delay(600);
+
+  // Step 2: Move eyes left, right, center
+  pwm.setPWM(EYE_SERVO, 0, EYE_LEFT);
+  delay(700);
+  pwm.setPWM(EYE_SERVO, 0, EYE_RIGHT);
+  delay(700);
+  pwm.setPWM(EYE_SERVO, 0, EYE_CENTER);
+  delay(700);
+
+  // Step 3: Blink both eyes
+  blinkEyes();
+  delay(1200);
+
+  // Step 4: Pause before looping
+  delay(2000);
+}
+
+void centerAll() {
+  pwm.setPWM(TILT_SERVO, 0, CENTER_POS);
+  pwm.setPWM(EYE_SERVO, 0, EYE_CENTER);
+
+  // Right eyelids (corrected opening and inversion)
+  pwm.setPWM(RIGHT_TOP_LID, 0, LID_OPEN_RIGHT);
+  pwm.setPWM(RIGHT_BOTTOM_LID, 0, LID_CLOSED_RIGHT);
+
+  // Left eyelids
+  pwm.setPWM(LEFT_TOP_LID, 0, LID_CLOSED_LEFT);
+  pwm.setPWM(LEFT_BOTTOM_LID, 0, LID_OPEN_LEFT);
+}
+
+void blinkEyes() {
+  // Close eyelids
+  pwm.setPWM(RIGHT_TOP_LID, 0, LID_CLOSED_RIGHT);
+  pwm.setPWM(RIGHT_BOTTOM_LID, 0, LID_OPEN_RIGHT);
+  pwm.setPWM(LEFT_TOP_LID, 0, LID_OPEN_LEFT);
+  pwm.setPWM(LEFT_BOTTOM_LID, 0, LID_CLOSED_LEFT);
+  delay(250);
+
+  // Open eyelids
+  pwm.setPWM(RIGHT_TOP_LID, 0, LID_OPEN_RIGHT);
+  pwm.setPWM(RIGHT_BOTTOM_LID, 0, LID_CLOSED_RIGHT);
+  pwm.setPWM(LEFT_TOP_LID, 0, LID_CLOSED_LEFT);
+  pwm.setPWM(LEFT_BOTTOM_LID, 0, LID_OPEN_LEFT);
+}
