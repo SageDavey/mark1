@@ -1,0 +1,82 @@
+Project Report: Nextion Display GIF + Video Playback with Arduino Mega 2560
+🧠 Objective
+Display a GIF animation on Page 0 of the Nextion screen.
+
+After the GIF plays once, switch to Page 1.
+
+On Page 1, loop a video-style frame animation forever.
+
+Powered and controlled using an Arduino Mega 2560, with images loaded from an SD card.
+
+🔧 Hardware and Software Used
+Nextion Enhanced Display (with SD card reader)
+
+Arduino Mega 2560
+
+Nextion Editor (for building screen pages, picture management, and logic)
+
+SD Card (containing .tft file, frame images for GIF and video)
+
+📄 Page 0 – GIF Animation Setup
+✅ Components:
+Picture component: p0
+
+Variable component: va0
+
+Timer: tm0 (running the frame code)
+
+🧩 Frame Animation Code (Timer tm0):
+cpp
+Copy
+Edit
+p0.pic=va0.val
+va0.val=va0.val+1
+if(va0.val>145)
+{
+  page 1
+}
+Displays frames 0–145 as the animated GIF.
+
+Once frame 145 is reached, switches to Page 1.
+
+📄 Page 1 – Video Loop Setup
+✅ Components:
+Picture component: p1
+
+Variable component: v0
+
+Timer: tm0 (on Page 1, separate from Page 0 timer)
+
+🧩 Frame Loop Code (Timer tm0):
+cpp
+Copy
+Edit
+p1.pic=v0.val
+v0.val=v0.val+1
+if(v0.val>199) // Adjust to total video frames
+{
+  v0.val=0
+}
+Continuously plays video-style frames from SD card.
+
+Loops infinitely once the last frame is reached.
+
+⚠️ Troubleshooting Summary
+❌ Compilation Errors Resolved:
+Error: Invalid Variables: p1.pic, va1.val
+➜ Caused by referencing components that did not exist on Page 1.
+
+✅ Fix:
+Added p1 (Picture) and v0 (Variable) components on Page 1.
+
+Replaced invalid va1 with v0, your correct video counter variable.
+
+📊 Memory and File Size Overview
+
+Item	Size / Value
+Available Memory	524,288 bytes (512 KB)
+Global Memory Used	16 bytes
+GIF Picture Size	3,670,360 bytes (~3.5 MB)
+Video Size	49,661,653 bytes (~47 MB)
+Page 0 Memory Usage	212 bytes
+Page 1 Memory Usage	64,256 bytes
