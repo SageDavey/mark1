@@ -1,0 +1,95 @@
+🧾 Project Report: Robot Eye Animation and Expression Development
+Project Goal:
+To animate a robot face using servo motors, enabling expressive eye movement and eyelid control including blinking, squinting, and looking in various directions.
+
+Hardware Setup:
+Adafruit 16-channel PWM Servo Driver
+
+6 servo motors:
+
+1 for eye movement (both eyes)
+
+1 for head tilt
+
+2 for right eyelid (top and bottom)
+
+2 for left eyelid (top and bottom)
+
+Power: External 5V source connected to V+ and GND rails of the servo driver board
+
+Controlled by: Arduino-compatible microcontroller
+
+Servo Channel Assignments:
+
+Channel	Function
+0	Eye Movement
+1	Head Tilt
+2	Right Top Eyelid
+3	Right Bottom Eyelid
+4	Left Top Eyelid
+5	Left Bottom Eyelid
+Development Timeline and Key Changes:
+✅ Initial Setup and Debugging
+Verified all servos were powered and connected correctly.
+
+Identified servo 0 (eyes) and servo 1 (tilt) were swapped in interpretation — fixed.
+
+Fixed servo calibration to match physical motion and orientation.
+
+Corrected servo positions to compensate for eye drift (slight shift to the left).
+
+Fixed eyelid open/close logic for both eyes — top and bottom lids required inverse behavior.
+
+✅ Blinking Mechanism
+Implemented blinkEyes() function to animate eyelid closing and opening.
+
+Adjusted servo values to ensure smooth, synchronized blinks.
+
+Tuned blink duration to be servo-safe while still expressive.
+
+✅ Eye Movement
+Implemented left, right, and center gaze movements.
+
+Adjusted pulse widths to keep eye movement within a natural range.
+
+Added return to center after motion for better realism.
+
+✅ Error Handling and Recovery
+Diagnosed issues related to:
+
+No servo response due to V+ power disconnect
+
+Misassigned eyelid values causing servos to fully close or "freak out"
+
+Inconsistent servo pulse widths and directions
+
+Implemented a known-good baseline reset code to recover from unstable states.
+
+✅ Expression Expansion
+Designed animation sequences:
+
+Basic loop: blink → look left → look right → blink again
+
+Conceptual expressions like surprised and scrutinizing squint were prototyped.
+
+Stable Baseline Features (Final Verified Code):
+Smooth eye movement: Left, right, center
+
+Working blink for both eyes with synchronized eyelid motion
+
+Accurate return to center after blinks and gaze shifts
+
+Easy-to-tune constants for each eyelid and eye behavior
+
+Next Steps:
+Refine facial expressions:
+
+Add "surprised to be alive" with widened eyes and head tilt
+
+Add "slow scrutinizing squint"
+
+Implement expression queues for non-repetitive behavior
+
+Add microphone or touch input to trigger specific expressions
+
+Optionally expand to include mouth or eyebrow servos for fuller expression
